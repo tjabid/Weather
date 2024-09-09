@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var viewModel = MainViewModel()
+    @StateObject var viewModel = MainViewModel()
     
     var body: some View {
         ZStack(alignment: .leading){
@@ -23,23 +23,21 @@ struct ContentView: View {
             }
             
             if viewModel.viewState  == .success {
-                
+                WeatherView(weather: viewModel.currentWeather).environmentObject(viewModel)
             }
             
-            if viewModel.viewState  == .failure {
-                
+            if viewModel.viewState  == .failureData {
+                Text("Failed to load data!")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            
+            if viewModel.viewState  == .failureLocation {
+                LocationRequestView() {
+                    viewModel.requestLocation()
+                }
             }
         }
         .background(Color(hue: 0.656, saturation: 0.787, brightness: 0.354))
-        
-        
-//        VStack {
-//            Image(systemName: "globe")
-//                .imageScale(.large)
-//                .foregroundStyle(.tint)
-//            Text("Hello, world!")
-//        }
-//        .padding()
     }
 }
 

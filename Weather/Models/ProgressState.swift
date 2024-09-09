@@ -8,8 +8,10 @@
 import Foundation
 
 enum ProgressState {
+    case none
     case requestLocation
     case loading
     case success
-    case failure
+    case failureLocation
+    case failureData
 }
