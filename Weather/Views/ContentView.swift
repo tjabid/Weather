@@ -22,8 +22,14 @@ struct ContentView: View {
                 LoadingStateView()
             }
             
-            if viewModel.viewState  == .success {
-                WeatherView(weather: viewModel.currentWeather).environmentObject(viewModel)
+            if viewModel.viewState  == .displayWeatherList {
+                if viewModel.currentWeather != nil {
+                    WeatherView(viewModel: viewModel)
+                }
+            }
+            
+            if viewModel.viewState  == .displayDetail {
+                WeatherDetailView(viewModel: viewModel)
             }
             
             if viewModel.viewState  == .failureData {
@@ -37,6 +43,7 @@ struct ContentView: View {
                 }
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(hue: 0.656, saturation: 0.787, brightness: 0.354))
     }
 }

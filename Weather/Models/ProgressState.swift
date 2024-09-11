@@ -11,7 +11,8 @@ enum ProgressState {
     case none
     case requestLocation
     case loading
-    case success
+    case displayWeatherList
+    case displayDetail
     case failureLocation
     case failureData
 }

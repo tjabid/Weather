@@ -28,12 +28,15 @@ struct WeatherResponse: Codable {
         case date = "dt"
     }
     
+    static func getDefaultValue() -> WeatherResponse {
+        return WeatherResponse(id: 0, name: "Location Name", coordinate: CoordinateResponse.getDefaultValue(), weatherDetail: [], mainValue: WeatherMainValue.getDefaultValue(), visibility: 0, wind: Wind.getDefaultValue(), clouds: nil, rain: nil, snow: nil, date: 0)
+    }
 }
 
 struct CoordinateResponse: Codable {
     let lon, lat: Double
 
-    static func emptyInit() -> CoordinateResponse {
+    static func getDefaultValue() -> CoordinateResponse {
         return CoordinateResponse(lon: 0.0, lat: 0.0)
     }
 }
@@ -45,7 +48,7 @@ struct WeatherRain: Codable {
         case oneHour = "1h"
     }
 
-    static func emptyInit() -> WeatherRain {
+    static func getDefaultValue() -> WeatherRain {
         return WeatherRain(oneHour: 0)
     }
 }
@@ -57,7 +60,7 @@ struct WeatherSnow: Codable {
         case oneHour = "1h"
     }
 
-    static func emptyInit() -> WeatherSnow {
+    static func getDefaultValue() -> WeatherSnow {
         return WeatherSnow(oneHour: 0)
     }
 }
@@ -65,7 +68,7 @@ struct WeatherSnow: Codable {
 struct WeatherClouds: Codable {
     let all: Int
 
-    static func emptyInit() -> WeatherClouds {
+    static func getDefaultValue() -> WeatherClouds {
         return WeatherClouds(all: 0)
     }
 }
@@ -79,14 +82,14 @@ struct WeatherDetail: Codable {
         case icon
     }
     
-//    static func emptyInit() -> WeatherDetail {
-//        return WeatherDetail(
-//            id: 0,
-//            main: "",
-//            description: "",
-//            icon: ""
-//        )
-//    }
+    static func getDefaultValue() -> WeatherDetail {
+        return WeatherDetail(
+            id: 0,
+            main: "",
+            description: "",
+            icon: ""
+        )
+    }
 }
 
 struct WeatherMainValue: Codable {
@@ -101,23 +104,23 @@ struct WeatherMainValue: Codable {
         case pressure, humidity
     }
     
-//    static func emptyInit() -> WeatherMainValue {
-//        return WeatherMainValue(
-//            temp: 0.0,
-//            feelsLike: 0.0,
-//            tempMin: 0,
-//            tempMax: 0,
-//            pressure: 0,
-//            humidity: 0
-//        )
-//    }
+    static func getDefaultValue() -> WeatherMainValue {
+        return WeatherMainValue(
+            temp: 0.0,
+            feelsLike: 0.0,
+            tempMin: 0,
+            tempMax: 0,
+            pressure: 0,
+            humidity: 0
+        )
+    }
 }
 
 struct Wind: Codable {
     let speed: Double
     let deg: Int?
     
-//    static func emptyInit() -> Wind {
-//        return Wind(speed: 0.0, deg: nil)
-//    }
+    static func getDefaultValue() -> Wind {
+        return Wind(speed: 0.0, deg: nil)
+    }
 }

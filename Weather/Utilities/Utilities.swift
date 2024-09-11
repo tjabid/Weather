@@ -7,10 +7,17 @@
 
 import Foundation
 
-// Extension for rounded Double to 0 decimals
+// Extension for Double
 extension Double {
     func toString() -> String {
         return String(format: "%.0f", self)
+    }
+}
+
+// Extension for Int
+extension Int {
+    func toString() -> String {
+        return String(format: "%d", self)
     }
 }
 

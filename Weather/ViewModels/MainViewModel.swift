@@ -12,6 +12,7 @@ class MainViewModel: ObservableObject {
     
     let locationRepo: LocationRepository
     let weatherRepo: WeatherRepository
+    var detailWeather: Weather
     
     var viewState: ProgressState = ProgressState.none {
         willSet {
@@ -26,13 +27,23 @@ class MainViewModel: ObservableObject {
     }
     
     init(locationRepo: LocationRepository = LocationRepository(), weatherRepo: WeatherRepository = WeatherRepository(), 
-         viewState: ProgressState = ProgressState.none, currentWeather: WeatherResponse? = nil) {
+         viewState: ProgressState = ProgressState.none, currentWeather: WeatherResponse? = nil, detailWeather: Weather = Weather.getDefaultValue()) {
         self.locationRepo = locationRepo
         self.weatherRepo = weatherRepo
         self.viewState = viewState
         self.currentWeather = currentWeather
+        self.detailWeather = detailWeather
         
-        loadWeatherData(coordinates: Coordinate(latitude: 37.785834, longitude: -122.406417))
+        loadWeatherData(coordinates: Coordinate(latitude: 37.785834, longitude: -122.406417))//todo only for testing - remove
+    }
+    
+    func setWeatherDetail(selectedWeather: Weather) {
+        self.detailWeather = selectedWeather
+        self.viewState = .displayDetail
+    }
+    
+    func showList() {
+        self.viewState = .displayWeatherList
     }
     
     func requestLocation() {
@@ -55,10 +66,14 @@ class MainViewModel: ObservableObject {
             
             if let currentWeather = currentWeather {
                 weakSelf.currentWeather = currentWeather
-                weakSelf.viewState = .success
+                weakSelf.viewState = .displayWeatherList
             } else {
                 weakSelf.viewState = .failureData
             }
         })
+    }
+    
+    static func getDefaultValue() -> MainViewModel {
+        return MainViewModel()
     }
 }

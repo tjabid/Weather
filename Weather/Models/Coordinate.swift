@@ -10,7 +10,7 @@ import Foundation
 struct Coordinate: Codable {
     let latitude, longitude: Double
     
-    static func getPreviewItem() -> Coordinate {
+    static func getDefaultValue() -> Coordinate {
         return Coordinate(latitude: 0, longitude: 0)
     }
 }
