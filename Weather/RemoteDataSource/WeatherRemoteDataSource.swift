@@ -7,16 +7,20 @@
 
 import Foundation
 
-typealias CurrentWeatherCompletionHandler = (WeatherResponse?, Error?) -> Void
+typealias CurrentWeatherCompletionHandler = (Weather?, Error?) -> Void
 
 class WeatherRemoteDataSource {
     
-    private let apiKey = "f9bdec1d40c30da63dbdd46711a675f9"
-    private let decoder = JSONDecoder()
+    private let baseUrl = "https://api.weatherapi.com/v1/"
+    private let apiKey = "646b79fbc24e4733b3652139241109"
+    private let decoder: JSONDecoder
     private let session: URLSession
+    private let mapper: WeatherMapper
     
-    init() {
-        session = URLSession(configuration: .default)
+    init(session: URLSession = URLSession(configuration: .default), decoder: JSONDecoder = JSONDecoder(), mapper: WeatherMapper = WeatherMapper()) {
+        self.session = session
+        self.decoder = decoder
+        self.mapper = mapper
     }
     
     private func getBaseRequest<T: Codable>(url: URL, completionHandler completion:  @escaping (_ object: T?,_ error: Error?) -> ()) {
@@ -53,11 +57,15 @@ class WeatherRemoteDataSource {
     }
     
     func getCoordinatesWeather(at coordinate: Coordinate, completionHandler completion: @escaping CurrentWeatherCompletionHandler) {
-        guard let url = URL(string: "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinate.latitude)&lon=\(coordinate.longitude)&appid=\(apiKey)&units=metric") else { fatalError("Missing URL")
+        guard let url = URL(string: "\(baseUrl)current.json?key=\(apiKey)&q=\(coordinate.latitude),\(coordinate.longitude)&aqi=yes") else { fatalError("Missing URL")
         }
         
-        getBaseRequest(url: url) { (weather: WeatherResponse?, error: Error?) in
-            completion(weather, error)
+        getBaseRequest(url: url) { (weather: EndpointResponse?, error: Error?) in
+            guard let w = self.mapper.parseCurrent(response: weather) else{
+                completion(nil, ResponseError.jsonParsingFailure)
+                return
+            }
+            completion(w, error)
         }
     }
 }
