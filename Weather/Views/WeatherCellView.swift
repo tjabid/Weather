@@ -38,7 +38,7 @@ struct WeatherCellView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.bottom)
                     
-                    let description = weather.description ?? weather.descriptionShort ?? "Not Available"
+                    let description = weather.description
                     Text(description)
                         .font(
                             Font.custom("SF Pro Display", size: 16)
@@ -51,7 +51,7 @@ struct WeatherCellView: View {
                 .frame(width: .none, height: 117, alignment: .topLeading)
                 
                 VStack {
-                    Text(weather.mainValue.temp.toString() + "°")
+                    Text(weather.tempC + "°")
                         .font(
                             Font.custom("SF Pro Display", size: 53)
                                 .weight(.light)
@@ -59,7 +59,7 @@ struct WeatherCellView: View {
                         .kerning(5.565)
                         .frame(maxWidth: .infinity, alignment: .topTrailing)
                     
-                    let variation = "H:\(weather.mainValue.tempMax)° L:\(weather.mainValue.tempMin)°"
+                    let variation = "Feels like:\(weather.feelslikeC)° Humidity:\(weather.humidity)°"
                     Text(variation)
                         .font(
                             Font.custom("SF Pro Display", size: 15)

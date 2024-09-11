@@ -19,16 +19,7 @@ struct WeatherView: View {
                     Font.custom("SF Pro Display", size: 37).weight(.bold)
                 )
             
-            Text(weather?.name ?? "Not found")
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            Text(weather?.mainValue.temp.toString() ?? "Not found")
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-//            let list: [Weather] = viewModel.currentWeather//todo get list from vm
-            let list: [Weather] = [
-                Weather.getDefaultValue(),
-                Weather(cityId: 0, name: "Location 1", coordinate: Coordinate.getDefaultValue(), description: "Cloudy", descriptionShort: "Cloudy", mainValue: WeatherMainValue.getDefaultValue(), visibility: 0, wind: Wind.getDefaultValue(), clouds: nil, rain: nil, snow: nil, date: 0),
-                Weather(cityId: 0, name: "Location 2", coordinate: Coordinate.getDefaultValue(), description: "Snow", descriptionShort: "Snow", mainValue: WeatherMainValue.getDefaultValue(), visibility: 0, wind: Wind.getDefaultValue(), clouds: nil, rain: nil, snow: nil, date: 0)
-            ]
+            let list: [Weather] = viewModel.weatherList
             
             if list.isEmpty {
                 Text("Not data found!")

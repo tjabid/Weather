@@ -15,13 +15,6 @@ struct LocationRequestView: View {
     var body: some View {
         VStack {
             VStack(spacing: 20) {
-//                Image(systemName: "sun.max.trianglebadge.exclamationmark.fill")
-//                    .frame(width: 150, height: 150)
-//                    .scaledToFill()
-////                    .aspectRatio(CGSize(width: 350, height: 350), contentMode: .fill)
-//                    .border(Color(white: 0.75))
-//                    .foregroundStyle(.tint)
-                
                 Text("Current location pemission")
                     .bold()
                     .font(.title)

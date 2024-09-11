@@ -9,20 +9,24 @@ import Foundation
 
 struct Weather: Identifiable {
     let id = UUID()
-    let cityId: Int
     let name: String
+    let country: String
     let coordinate: Coordinate
-    let description: String?
-    let descriptionShort: String?
-    let mainValue: WeatherMainValue
-    let visibility: Int
-    let wind: Wind
-    let clouds: WeatherClouds?
-    let rain: WeatherRain?
-    let snow: WeatherSnow?
-    let date: Int
+    let tempC: String
+    let feelslikeC: String
+    let windKph: String
+    let windDegree: String
+    let windDirection: String
+    let humidity: String
+    let cloud: String
+    let visibilityKM: String
+    let uv: String
+    let description: String
+    let lastUpdated: String
+    let lastUpdatedEpoch: Int
     
     static func getDefaultValue() -> Weather {
-        return Weather(cityId: 0, name: "Location Name", coordinate: Coordinate.getDefaultValue(), description: "Mostly Sunny", descriptionShort: "Sunny", mainValue: WeatherMainValue.getDefaultValue(), visibility: 0, wind: Wind.getDefaultValue(), clouds: nil, rain: nil, snow: nil, date: 0)
+        return Weather(name: "Location Name", country: "Country Name", coordinate: Coordinate.getDefaultValue(), tempC: "32", feelslikeC: "32", windKph: "32", windDegree: "10", windDirection: "NSW", humidity: "10", cloud: "10", visibilityKM: "5", uv: "5", description: "Cloudy", lastUpdated: "2024-09-11 10:00", lastUpdatedEpoch: 0)
     }
 }
+

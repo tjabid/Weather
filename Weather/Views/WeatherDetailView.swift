@@ -19,13 +19,14 @@ struct WeatherDetailView: View {
                     .font(Font.custom("SF Pro Display", size: 37))
                     .multilineTextAlignment(.center)
                 
-                if let description = weather.description ?? weather.descriptionShort {
-                    Text(description)
+                
+//                if let description = weather.description {
+                    Text(weather.description)
                         .font(Font.custom("SF Pro Display", size: 22)
                             .weight(.medium))
                         .multilineTextAlignment(.center)
                         .padding(.bottom)
-                }
+//                }
                 
                 HStack(spacing: 5) {
                     Image(systemName: "thermometer.medium")
@@ -40,7 +41,7 @@ struct WeatherDetailView: View {
                         .foregroundColor(.white)
                         .opacity(0.5)
                     
-                    Text(weather.mainValue.temp.toString() + "°")
+                    Text(weather.tempC + "°C")
                         .font(Font.custom("SF Pro Display", size: 35))
                         .padding(.trailing)
                         .frame(maxWidth: .infinity, alignment: .trailing)
@@ -58,12 +59,16 @@ struct WeatherDetailView: View {
                 
                 Grid(horizontalSpacing: 5) {
                     GridRow {
-                        GenericDetailCellView(label: "LOW TEMPERATURE", icon: "thermometer.low", value: weather.mainValue.tempMin.toString() + "°")
-                        GenericDetailCellView(label: "HIGH TEMPERATURE", icon: "thermometer.high", value: weather.mainValue.tempMax.toString() + "°")
+                        GenericDetailCellView(label: "FEELS LIKE", icon: "thermometer.high", value: weather.feelslikeC, unit: "°C")
+                        GenericDetailCellView(label: "WIND", icon: "wind", value: weather.windKph, unit: "KM/H")
                     }
-                    GridRow {                        
-                        GenericDetailCellView(label: "WIND", icon: "wind", value: weather.wind.speed.toString(), unit: "meter/sec")
-                        GenericDetailCellView(label: "HUMIDITY", icon: "humidity", value: weather.mainValue.humidity.toString(), unit: "%")
+                    GridRow {
+                        GenericDetailCellView(label: "VISIBILITY", icon: "sun.dust.circle", value: weather.visibilityKM, unit: "KM")
+                        GenericDetailCellView(label: "HUMIDITY", icon: "humidity", value: weather.humidity, unit: "%")
+                    }
+                    GridRow {
+                        GenericDetailCellView(label: "CLOUDS", icon: "cloud.fill", value: weather.cloud, unit: "%")
+                        GenericDetailCellView(label: "UV", icon: "thermometer.brakesignal", value: weather.uv, unit: "INDEX")
                     }
                 }
             }
