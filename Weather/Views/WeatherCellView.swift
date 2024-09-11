@@ -12,14 +12,7 @@ struct WeatherCellView: View {
     let itemClickedCallback: (Weather) -> Void
     
     var body: some View {
-        ZStack {
-            Rectangle()
-                .foregroundColor(.clear)
-                .frame(width: .none, height: 150)
-                .background(.white)
-                .cornerRadius(16)
-                .opacity(0.1)
-            
+        VStack {
             HStack(spacing: 5) {
                 VStack {
                     Text(weather.name)
@@ -29,7 +22,7 @@ struct WeatherCellView: View {
                         )
                         .frame(maxWidth: .infinity, alignment: .topLeading)
                     
-                    Text("Seongnam-si")
+                    Text(weather.country)
                         .font(
                             Font.custom("SF Pro Display", size: 16)
                                 .weight(.medium)
@@ -56,7 +49,6 @@ struct WeatherCellView: View {
                             Font.custom("SF Pro Display", size: 53)
                                 .weight(.light)
                         )
-                        .kerning(5.565)
                         .frame(maxWidth: .infinity, alignment: .topTrailing)
                     
                     let variation = "Feels like:\(weather.feelslikeC)° Humidity:\(weather.humidity)°"
@@ -73,8 +65,46 @@ struct WeatherCellView: View {
             }
             .frame(width: .none, height: 150)
             .padding(.horizontal, 20)
+            .background(.white.opacity(0.1))
+            .cornerRadius(16)
+            .foregroundColor(.white)
+            .overlay(
+                RoundedRectangle(cornerRadius: 15)
+                    .inset(by: 0.25)
+                    .stroke(.white.opacity(0.25), lineWidth: 0.5)
+            )
+            
+            if weather.showForecast {
+                HStack(spacing: 5) {
+                    Image(systemName: "calendar")
+                        .opacity(0.5)
+                    Text("10-DAY FORECAST")
+                        .font(
+                            Font.custom("SF Pro Display", size: 15)
+                                .weight(.medium)
+                        )
+                        .kerning(0.45)
+                        .foregroundColor(.white)
+                }.frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.top, 10)
+                
+                LazyVStack(alignment: .leading) {
+                    ForEach(weather.forecast) { f in
+                        ForecastCellView(forecast: f)
+                    }
+                }.frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 20)
+                    .background(.white.opacity(0.1))
+                    .cornerRadius(16)
+                    .foregroundColor(.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 15)
+                            .inset(by: 0.25)
+                            .stroke(.white.opacity(0.25), lineWidth: 0.5)
+                    )
+            }
         }
-        .frame(width: .none, height: 150)
+        .frame(width: .none, height: .none)
         .onTapGesture {
             itemClickedCallback(weather)
         }

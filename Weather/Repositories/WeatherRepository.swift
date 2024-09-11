@@ -15,4 +15,8 @@ class WeatherRepository {
         remoteDataSource.getCoordinatesWeather(at: coordinate, completionHandler:completion)
     }
     
+    func getWeatherForecast(at coordinate: Coordinate, completionHandler completion: @escaping CurrentWeatherCompletionHandler) {
+        remoteDataSource.getWeatherForecast(at: coordinate, completionHandler:completion)
+    }
+    
 }

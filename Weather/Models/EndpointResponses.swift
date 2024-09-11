@@ -51,7 +51,6 @@ struct WeatherResponse: Codable {
     let heatindexC, heatindexF, dewpointC, dewpointF: Double
     let visKM, visMiles, uv: Int
     let gustMph, gustKph: Double
-    let airQuality: [String: Double]
 
     enum CodingKeys: String, CodingKey {
         case lastUpdatedEpoch = "last_updated_epoch"
@@ -82,7 +81,6 @@ struct WeatherResponse: Codable {
         case uv
         case gustMph = "gust_mph"
         case gustKph = "gust_kph"
-        case airQuality = "air_quality"
     }
 }
 
@@ -103,19 +101,6 @@ struct Location: Codable {
         case tzID = "tz_id"
         case localtimeEpoch = "localtime_epoch"
         case localtime
-    }
-}
-
-struct AirQuality: Codable {
-    let co, no2, so2, pm25, pm10: Double
-    let o3, usEpaIndex, gbDefraIndex: Int
-
-    enum CodingKeys: String, CodingKey {
-        case co, no2, o3, so2
-        case pm25 = "pm2_5"
-        case pm10
-        case usEpaIndex = "us-epa-index"
-        case gbDefraIndex = "gb-defra-index"
     }
 }
 

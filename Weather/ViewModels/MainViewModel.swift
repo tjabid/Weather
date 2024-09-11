@@ -42,7 +42,7 @@ class MainViewModel: ObservableObject {
         self.detailWeather = detailWeather
         self.weatherList = weatherList
         
-        loadWeatherData(coordinates: Coordinate(latitude: 37.785834, longitude: -122.406417))//todo only for testing - remove
+        loadWeatherForecastData(coordinates: Coordinate(latitude: 25.25, longitude: 55.28))//todo only for testing - remove
     }
     
     func setWeatherDetail(selectedWeather: Weather) {
@@ -52,7 +52,7 @@ class MainViewModel: ObservableObject {
     
     func showList() {
         self.viewState = .displayWeatherList
-        loadWeatherData(coordinates: Coordinate(latitude: 25.25, longitude: 55.28))//todo only for testing - remove
+        loadWeatherData(coordinates: Coordinate(latitude: 37.785834, longitude: -122.406417))//todo only for testing - remove
     }
     
     func requestLocation() {
@@ -61,7 +61,7 @@ class MainViewModel: ObservableObject {
         locationRepo.requestLocation() { coordinates in
             if self.locationRepo.isLoading == false {
                 if coordinates != nil {
-                    self.loadWeatherData(coordinates: coordinates!)
+                    self.loadWeatherForecastData(coordinates: coordinates!)
                 } else {
                     self.viewState = ProgressState.failureLocation
                 }
@@ -74,8 +74,22 @@ class MainViewModel: ObservableObject {
             guard let weakSelf = self else { return }
             
             if let currentWeather = currentWeather {
-                weakSelf.currentWeather = currentWeather
                 weakSelf.addLocatioaddLocationToList(weather: currentWeather)
+                weakSelf.viewState = .displayWeatherList
+            } else {
+                weakSelf.viewState = .failureData
+            }
+        })
+    }
+    
+    func loadWeatherForecastData(coordinates: Coordinate) {
+        weatherRepo.getWeatherForecast(at: coordinates, completionHandler: { [weak self] (currentWeather: Weather?, error: Error?) -> Void in
+            guard let weakSelf = self else { return }
+            
+            if let currentWeather = currentWeather {
+                weakSelf.currentWeather = currentWeather
+                weakSelf.currentWeather?.showForecast = true
+                weakSelf.addLocatioaddLocationToList(weather: weakSelf.currentWeather!)
                 weakSelf.viewState = .displayWeatherList
             } else {
                 weakSelf.viewState = .failureData
@@ -87,7 +101,7 @@ class MainViewModel: ObservableObject {
         if let oldIndex = weatherList.firstIndex(where: { $0.coordinate.latitude == weather.coordinate.latitude && $0.coordinate.longitude == weather.coordinate.longitude}) {
             weatherList.remove(at: oldIndex)
         }
-        weatherList.insert(weather, at: 0)
+        weatherList.insert(weather, at: weatherList.endIndex)
         //todo add coordinates to cache for later
     }
     

@@ -24,9 +24,11 @@ struct Weather: Identifiable {
     let description: String
     let lastUpdated: String
     let lastUpdatedEpoch: Int
+    let forecast: [Forecast]
+    var showForecast: Bool = false
     
     static func getDefaultValue() -> Weather {
-        return Weather(name: "Location Name", country: "Country Name", coordinate: Coordinate.getDefaultValue(), tempC: "32", feelslikeC: "32", windKph: "32", windDegree: "10", windDirection: "NSW", humidity: "10", cloud: "10", visibilityKM: "5", uv: "5", description: "Cloudy", lastUpdated: "2024-09-11 10:00", lastUpdatedEpoch: 0)
+        return Weather(name: "Location Name", country: "Country Name", coordinate: Coordinate.getDefaultValue(), tempC: "32", feelslikeC: "32", windKph: "32", windDegree: "10", windDirection: "NSW", humidity: "10", cloud: "10", visibilityKM: "5", uv: "5", description: "Cloudy", lastUpdated: "2024-09-11 10:00", lastUpdatedEpoch: 0, forecast: [], showForecast: false)
     }
 }
 
