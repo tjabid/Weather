@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Coordinate: Codable {
+struct Coordinate: Equatable {
     let latitude, longitude: Double
     
     static func getDefaultValue() -> Coordinate {

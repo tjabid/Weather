@@ -42,7 +42,25 @@ class MainViewModel: ObservableObject {
         self.detailWeather = detailWeather
         self.weatherList = weatherList
         
-        loadWeatherForecastData(coordinates: Coordinate(latitude: 25.25, longitude: 55.28))//todo only for testing - remove
+        checkInitailState()
+    }
+    
+    func checkInitailState() {
+        if self.weatherRepo.hasCachedItem() {
+            self.viewState = .loading
+            weatherRepo.getWeatherForCachedItems { [weak self] (weather: Weather?, error: Error?) -> Void in
+                guard let weakSelf = self else { return }
+                
+                if let weatherResponse = weather {
+                    weakSelf.addLocationToList(weather: weatherResponse)
+                    weakSelf.viewState = .displayWeatherList
+                } else {
+                    weakSelf.viewState = .failureData
+                }
+            }
+        } else {
+            self.viewState = .requestLocation
+        }
     }
     
     func setWeatherDetail(selectedWeather: Weather) {
@@ -52,7 +70,6 @@ class MainViewModel: ObservableObject {
     
     func showList() {
         self.viewState = .displayWeatherList
-        loadWeatherData(coordinates: Coordinate(latitude: 37.785834, longitude: -122.406417))//todo only for testing - remove
     }
     
     func requestLocation() {
@@ -61,7 +78,7 @@ class MainViewModel: ObservableObject {
         locationRepo.requestLocation() { coordinates in
             if self.locationRepo.isLoading == false {
                 if coordinates != nil {
-                    self.loadWeatherForecastData(coordinates: coordinates!)
+                    self.loadWeatherForecastData(query: "\(coordinates!.latitude),\(coordinates!.longitude)")
                 } else {
                     self.viewState = ProgressState.failureLocation
                 }
@@ -69,12 +86,12 @@ class MainViewModel: ObservableObject {
         }
     }
     
-    func loadWeatherData(coordinates: Coordinate) {
-        weatherRepo.getCoordinatesWeather(at: coordinates, completionHandler: { [weak self] (currentWeather: Weather?, error: Error?) -> Void in
+    func loadWeatherData(query: String) {
+        weatherRepo.getCoordinatesWeather(at: query, completionHandler: { [weak self] (currentWeather: Weather?, error: Error?) -> Void in
             guard let weakSelf = self else { return }
             
             if let currentWeather = currentWeather {
-                weakSelf.addLocatioaddLocationToList(weather: currentWeather)
+                weakSelf.addLocationToList(weather: currentWeather)
                 weakSelf.viewState = .displayWeatherList
             } else {
                 weakSelf.viewState = .failureData
@@ -82,14 +99,14 @@ class MainViewModel: ObservableObject {
         })
     }
     
-    func loadWeatherForecastData(coordinates: Coordinate) {
-        weatherRepo.getWeatherForecast(at: coordinates, completionHandler: { [weak self] (currentWeather: Weather?, error: Error?) -> Void in
+    func loadWeatherForecastData(query: String) {
+        weatherRepo.getWeatherForecast(at: query, showForecast: true, completionHandler: { [weak self] (currentWeather: Weather?, error: Error?) -> Void in
             guard let weakSelf = self else { return }
             
             if let currentWeather = currentWeather {
                 weakSelf.currentWeather = currentWeather
                 weakSelf.currentWeather?.showForecast = true
-                weakSelf.addLocatioaddLocationToList(weather: weakSelf.currentWeather!)
+                weakSelf.addLocationToList(weather: weakSelf.currentWeather!, index: 0)
                 weakSelf.viewState = .displayWeatherList
             } else {
                 weakSelf.viewState = .failureData
@@ -97,12 +114,43 @@ class MainViewModel: ObservableObject {
         })
     }
     
-    func addLocatioaddLocationToList(weather: Weather) {
-        if let oldIndex = weatherList.firstIndex(where: { $0.coordinate.latitude == weather.coordinate.latitude && $0.coordinate.longitude == weather.coordinate.longitude}) {
+    func addLocationToList(weather: Weather, index: Int? = nil) {
+        if let oldIndex = weatherList.firstIndex(where: { $0.name == weather.name }) {
             weatherList.remove(at: oldIndex)
         }
-        weatherList.insert(weather, at: weatherList.endIndex)
-        //todo add coordinates to cache for later
+        weatherList.insert(weather, at: index ?? weatherList.endIndex)
+    }
+    
+    private var showSearchView: Bool = false {
+        willSet {
+            objectWillChange.send()
+        }
+    }
+    
+    func isSearchView() -> Bool {
+        return showSearchView
+    }
+    
+    func setSearchView(showSearchView: Bool) {
+        self.showSearchView = showSearchView
+    }
+    
+    func loadWeatherDataFromSearchView(query: String) {
+        viewState = .loading
+        setSearchView(showSearchView: false)
+        loadWeatherData(query: query)
+    }
+    
+    func updateSavedLocation(name: String) {
+        let oldViewState = viewState
+        viewState = .loading
+        if let newValue = weatherRepo.updateSavedLocation(name: name) {
+            addLocationToList(weather: newValue)
+            print("saving: \(name) \(newValue.savedLocation)")
+        } else {
+            print("saving: \(name) -----")
+        }
+        viewState = oldViewState
     }
     
     static func getDefaultValue() -> MainViewModel {

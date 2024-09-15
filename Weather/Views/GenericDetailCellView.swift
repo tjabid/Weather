@@ -19,10 +19,7 @@ struct GenericDetailCellView: View {
                 Image(systemName: icon)
                     .opacity(0.5)
                 Text(label)
-                    .font(
-                        Font.custom("SF Pro Display", size: 12)
-                            .weight(.medium)
-                    )
+                    .font(Font.medium(size: 12))
                     .kerning(0.45)
                     .foregroundColor(.white)
                     .opacity(0.5)
@@ -30,15 +27,12 @@ struct GenericDetailCellView: View {
             
             HStack(spacing: 5) {
                 Text(value)
-                    .font(Font.custom("SF Pro Display", size: 35))
+                    .font(Font.medium(size: 35))
                     .frame(maxWidth: .none, alignment: .leading)
                 
                 if unit != nil {
                     Text(unit!)
-                        .font(
-                            Font.custom("SF Pro Display", size: 12)
-                                .weight(.medium)
-                        )
+                        .font(Font.medium(size: 12))
                         .frame(maxWidth: .none, maxHeight: .infinity, alignment: .bottom)
                         .offset(y: -6)
                         .kerning(0.45)

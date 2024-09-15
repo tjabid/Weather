@@ -9,7 +9,7 @@ import Foundation
 
 class WeatherMapper {
     
-    func parseCurrent(response: EndpointResponse?, forecast: [Forecast]? = nil) -> Weather? {
+    func parseCurrent(response: EndpointResponse?, forecast: [Forecast]? = nil, showForecast: Bool = false) -> Weather? {
         guard let value = response else {
             return nil
         }
@@ -30,11 +30,12 @@ class WeatherMapper {
             description: value.weatherResponse.condition.text,
             lastUpdated: value.weatherResponse.lastUpdated,
             lastUpdatedEpoch: value.weatherResponse.lastUpdatedEpoch,
-            forecast: forecast ?? []
+            forecast: forecast ?? [],
+            showForecast: showForecast
         )
     }
     
-    func parseForecast(response: EndpointResponse?) -> Weather? {
+    func parseForecast(response: EndpointResponse?, showForecast: Bool) -> Weather? {
         guard response != nil else {
             return nil
         }
@@ -44,7 +45,6 @@ class WeatherMapper {
         }
         
         var forecastMapped: [Forecast] = []
-        var counter = 0
         
         forecast.forecastday.forEach{ item in
             let n = Forecast(
@@ -60,17 +60,16 @@ class WeatherMapper {
                 date: formatDate(timestamp: item.dateEpoch),
                 dateEpoch: item.dateEpoch
             )
-            forecastMapped.insert(n, at: counter)
-            counter += 1
+            forecastMapped.insert(n, at: forecastMapped.endIndex)
         }
         
         
-        return parseCurrent(response: response, forecast: forecastMapped)
+        return parseCurrent(response: response, forecast: forecastMapped, showForecast: showForecast)
     }
     
-    func formatDate(timestamp: Int) -> String {
+    private func formatDate(timestamp: Int) -> String {
         let date = Date(timeIntervalSince1970: TimeInterval(timestamp))
-
+        
         // Calculate today and tomorrow date
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
@@ -88,5 +87,18 @@ class WeatherMapper {
             dateString = dateFormatter.string(from: date)
         }
         return dateString
+    }
+    
+    func parseCacheWeatherItem(item: Weather) -> WeatherCache {
+        return WeatherCache(name: item.name, showForecast: item.showForecast)
+    }
+    
+    func parseCacheWeather(items: [Weather]) -> [WeatherCache] {
+        var weather: [WeatherCache] = []
+        items.forEach{ item in
+            weather.insert(parseCacheWeatherItem(item: item), at: weather.endIndex)
+        }
+        
+        return weather
     }
 }

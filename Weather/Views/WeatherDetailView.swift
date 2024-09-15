@@ -15,34 +15,50 @@ struct WeatherDetailView: View {
         
         ScrollView(.vertical) {
             VStack {
-                Text(weather.name)
-                    .font(Font.custom("SF Pro Display", size: 37))
-                    .multilineTextAlignment(.center)
-                
-                
-//                if let description = weather.description {
-                    Text(weather.description)
-                        .font(Font.custom("SF Pro Display", size: 22)
-                            .weight(.medium))
+                HStack(spacing: 5) {
+                    Image(systemName: "chevron.backward")
+                        .frame(width: 40, height: 40)
+                        .font(.system(size: 35))
+                        .onTapGesture {
+                            viewModel.showList()
+                        }
+                    
+                    Text(weather.name)
+                        .font(Font.medium(size: 37))
                         .multilineTextAlignment(.center)
-                        .padding(.bottom)
-//                }
+                        .kerning(0.45)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: .center)
+                    
+                    let image = if weather.savedLocation { "heart.fill" } else { "heart" }
+                    Image(systemName: image)
+                        .frame(width: 40, height: 40)
+                        .font(.system(size: 35))
+                        .onTapGesture {
+                            viewModel.updateSavedLocation(name: weather.name)
+                        }
+                }.frame(maxWidth: .infinity, alignment: .leading)
+                    .foregroundColor(.white)
+                    .background(Color(hue: 0.656, saturation: 0.787, brightness: 0.354))
+                
+                
+                Text(weather.description)
+                    .font(Font.medium(size: 22))
+                    .multilineTextAlignment(.leading)
+                    .padding(.bottom)
                 
                 HStack(spacing: 5) {
                     Image(systemName: "thermometer.medium")
                         .opacity(0.5)
                         .padding(.leading)
                     Text("TEMPERATURE")
-                        .font(
-                            Font.custom("SF Pro Display", size: 12)
-                                .weight(.medium)
-                        )
+                        .font(Font.medium(size: 12))
                         .kerning(0.45)
                         .foregroundColor(.white)
                         .opacity(0.5)
                     
                     Text(weather.tempC + "°C")
-                        .font(Font.custom("SF Pro Display", size: 35))
+                        .font(Font.medium(size: 35))
                         .padding(.trailing)
                         .frame(maxWidth: .infinity, alignment: .trailing)
                 }

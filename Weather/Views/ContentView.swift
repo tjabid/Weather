@@ -18,12 +18,12 @@ struct ContentView: View {
                 }
             }
             
-            if viewModel.viewState == .loading {
+            if viewModel.viewState == .loading || viewModel.viewState  == .none {
                 LoadingStateView()
             }
             
             if viewModel.viewState  == .displayWeatherList {
-                if viewModel.currentWeather != nil {
+                if !viewModel.weatherList.isEmpty {
                     WeatherView(viewModel: viewModel)
                 }
             }
@@ -33,13 +33,19 @@ struct ContentView: View {
             }
             
             if viewModel.viewState  == .failureData {
-                Text("Failed to load data!")
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                DataLoadFailureView {
+                    viewModel.showList()
+                }
             }
             
             if viewModel.viewState  == .failureLocation {
                 LocationRequestView() {
                     viewModel.requestLocation()
+                }
+            }
+            
+            if viewModel.isSearchView() {
+                SearchCityView(viewModel: viewModel) {
                 }
             }
         }

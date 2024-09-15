@@ -15,4 +15,5 @@ enum ProgressState {
     case displayDetail
     case failureLocation
     case failureData
+    case searchView
 }

@@ -7,9 +7,12 @@
 
 import Foundation
 
-typealias CurrentWeatherCompletionHandler = (Weather?, Error?) -> Void
+protocol WeatherRemoteDataSourceProtocol {
+    func getCoordinatesWeather(at query: String, completionHandler completion: @escaping CurrentWeatherCompletionHandler)
+    func getWeatherForecast(at query: String, showForecast: Bool, completionHandler completion: @escaping CurrentWeatherCompletionHandler)
+}
 
-class WeatherRemoteDataSource {
+class WeatherRemoteDataSource: WeatherRemoteDataSourceProtocol {
     
     private let baseUrl = "https://api.weatherapi.com/v1/"
     private let apiKey = "646b79fbc24e4733b3652139241109"
@@ -34,7 +37,6 @@ class WeatherRemoteDataSource {
                         completion(nil, ResponseError.requestFailed)
                         return
                     }
-                    log(message: httpResponse)
                     
                     if httpResponse.statusCode == 200 {
                         do {
@@ -56,12 +58,17 @@ class WeatherRemoteDataSource {
         task.resume()
     }
     
-    func getCoordinatesWeather(at coordinate: Coordinate, completionHandler completion: @escaping CurrentWeatherCompletionHandler) {
-        guard let url = URL(string: "\(baseUrl)current.json?key=\(apiKey)&q=\(coordinate.latitude),\(coordinate.longitude)&aqi=no") else { fatalError("Missing URL")
+    func getCoordinatesWeather(at query: String, completionHandler completion: @escaping CurrentWeatherCompletionHandler) {
+        guard let url = URL(string: "\(baseUrl)current.json?key=\(apiKey)&q=\(query)&aqi=no") else { fatalError("Missing URL")
         }
         
         getBaseRequest(url: url) { (weather: EndpointResponse?, error: Error?) in
-            guard let w = self.mapper.parseCurrent(response: weather) else{
+            guard let weatherResponse = weather else {
+                completion(nil, error)
+                return
+            }
+            
+            guard let w = self.mapper.parseCurrent(response: weatherResponse) else {
                 completion(nil, ResponseError.jsonParsingFailure)
                 return
             }
@@ -69,12 +76,12 @@ class WeatherRemoteDataSource {
         }
     }
     
-    func getWeatherForecast(at coordinate: Coordinate, completionHandler completion: @escaping CurrentWeatherCompletionHandler) {
-        guard let url = URL(string: "\(baseUrl)forecast.json?key=\(apiKey)&q=\(coordinate.latitude),\(coordinate.longitude)&days=10&aqi=no&alerts=no") else { fatalError("Missing URL")
+    func getWeatherForecast(at query: String, showForecast: Bool, completionHandler completion: @escaping CurrentWeatherCompletionHandler) {
+        guard let url = URL(string: "\(baseUrl)forecast.json?key=\(apiKey)&q=\(query)&days=10&aqi=no&alerts=no") else { fatalError("Missing URL")
         }
         
         getBaseRequest(url: url) { (weather: EndpointResponse?, error: Error?) in
-            guard let w = self.mapper.parseForecast(response: weather) else{
+            guard let w = self.mapper.parseForecast(response: weather, showForecast: showForecast) else {
                 completion(nil, ResponseError.jsonParsingFailure)
                 return
             }
