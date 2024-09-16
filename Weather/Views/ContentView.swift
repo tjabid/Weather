@@ -23,9 +23,7 @@ struct ContentView: View {
             }
             
             if viewModel.viewState  == .displayWeatherList {
-                if !viewModel.weatherList.isEmpty {
-                    WeatherView(viewModel: viewModel)
-                }
+                WeatherView(viewModel: viewModel)
             }
             
             if viewModel.viewState  == .displayDetail {
