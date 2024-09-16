@@ -12,7 +12,7 @@ struct DataLoadFailureView: View {
     
     var body: some View {
         VStack(spacing: 10) {
-            TopView(title: "Search City") {
+            TopView(title: "Weather") {
                 backClicled()
             }
             

@@ -21,8 +21,6 @@ struct WeatherView: View {
             
             // Search bar
             Text("Search city")
-//                .frame(maxWidth: .infinity, maxHeight: .infinity)
-//            TextField("Search for a city", text: $searchText)
                 .padding(8)
                 .foregroundColor(.black)
                 .frame(maxWidth: .infinity, alignment: .leading)
