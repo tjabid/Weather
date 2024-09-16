@@ -27,6 +27,7 @@ App starts with request for location on first launch showing forecast and option
 | :----: | :----: |
 ![current_location](screenshots/current_location.png) | ![saved_location](screenshots/saved_location.png)
 
+### Details Screen
 | Details Screen | Details Screen |
 | :----: |  :----: | 
 ![details](screenshots/details.png) |![details_saved](screenshots/details_saved.png) |
