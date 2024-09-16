@@ -15,7 +15,7 @@ protocol WeatherRemoteDataSourceProtocol {
 class WeatherRemoteDataSource: WeatherRemoteDataSourceProtocol {
     
     private let baseUrl = "https://api.weatherapi.com/v1/"
-    private let apiKey = "646b79fbc24e4733b3652139241109"
+    private var apiKey: String
     private let decoder: JSONDecoder
     private let session: URLSession
     private let mapper: WeatherMapper
@@ -24,6 +24,7 @@ class WeatherRemoteDataSource: WeatherRemoteDataSourceProtocol {
         self.session = session
         self.decoder = decoder
         self.mapper = mapper
+        self.apiKey = Bundle.main.infoDictionary?["API_KEY"] as? String ?? ""
     }
     
     private func getBaseRequest<T: Codable>(url: URL, completionHandler completion:  @escaping (_ object: T?,_ error: Error?) -> ()) {
