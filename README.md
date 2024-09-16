@@ -18,9 +18,9 @@ App starts with request for location on first launch showing forecast and option
 
 ### Location Request Screen:
 
-| Location request |
-| :----: | 
-![Location_request](screenshots/location_request.png) |
+| <div style="width:290px">Location Request</div> |
+| --------------------------------------- |
+| ![Location_request](screenshots/location_request.png) |
 
 ### Weather List Screen
 | Current Location Weather | Saved Location Weather |
