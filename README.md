@@ -9,8 +9,8 @@ Above image used from [this](https://medium.com/@ami0275/mvvm-clean-architecture
 
 ## Weather Endpoint:
 
-App uses (Weather API: Realtime)[https://app.swaggerhub.com/apis-docs/WeatherAPI.com/WeatherAPI/1.0.2#/APIs/realtime-weather] to get weather through city name.
-App uses (Weather API: Forecast)[https://app.swaggerhub.com/apis-docs/WeatherAPI.com/WeatherAPI/1.0.2#/APIs/forecast-weather] to get forecaset for 10 days through cooridnates.
+App uses [Weather API: Realtime](https://app.swaggerhub.com/apis-docs/WeatherAPI.com/WeatherAPI/1.0.2#/APIs/realtime-weather) to get weather through city name.
+App uses [Weather API: Forecast](https://app.swaggerhub.com/apis-docs/WeatherAPI.com/WeatherAPI/1.0.2#/APIs/forecast-weather) to get forecaset for 10 days through cooridnates.
  
 
 ## Application Flow:
