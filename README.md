@@ -1,4 +1,4 @@
-# Equiem Tech Assignment - Weather App
+# Weather App
 This app shows user weather of current location with 10 days forcast; let's them search and save locations
 
 ## Design Pattern:
